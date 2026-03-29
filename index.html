@@ -72,6 +72,7 @@ html{font-size:15px}body{font-family:var(--f);background:var(--bg);color:var(--t
 .sc-sep{border:none;border-top:1px solid var(--bd);margin:8px 0}
 .sc-bonus{font-size:.82rem;margin-top:4px}
 .sc-bonus label{color:var(--ts);margin-right:4px}
+.t-info{background:var(--bgc);border-bottom:1px solid var(--bd);padding:8px 20px;text-align:center}.t-info .tn{font-size:1rem;font-weight:700}.t-info .td{font-size:.82rem;color:var(--ts);margin-left:10px}
 @keyframes fi{from{opacity:0}to{opacity:1}}@keyframes si{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}@keyframes fs{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:500px){html{font-size:14px}.hdr-bg{display:none}.ar{gap:5px}.btn{padding:7px 11px;font-size:.82rem}.sg{grid-template-columns:repeat(3,1fr)}.hg{grid-template-columns:1fr}}
 </style>
@@ -83,17 +84,21 @@ html{font-size:15px}body{font-family:var(--f);background:var(--bg);color:var(--t
   <div style="position:relative">
     <button class="ham" id="menuBtn" aria-label="メニュー"><span></span><span></span><span></span></button>
     <div class="mdd" id="menuDd">
+      <button class="mi" onclick="openM('tournamentInfo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>大会設定</button>
       <button class="mi" onclick="openM('participants')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>メンバー管理</button>
       <button class="mi" onclick="openM('status')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 11l-3 3-3-3"/></svg>参加状態の変更</button>
       <button class="mi" onclick="openM('pairMatrix')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>ペア回数マトリクス</button>
       <button class="mi" onclick="openM('oppMatrix')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>敵対回数マトリクス</button>
       <button class="mi" onclick="openM('drawW')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>抽選スコア設定</button>
       <button class="mi" onclick="openM('scoreC')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06c.5.5 1.2.7 1.82.33a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09c.1.7.5 1.3 1 1.51.6.37 1.3.17 1.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06c-.5.5-.7 1.2-.33 1.82.2.5.8.9 1.51 1H21a2 2 0 010 4h-.09c-.7.1-1.3.5-1.51 1z"/></svg>得点配分設定</button>
+      <button class="mi" onclick="exportData()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>データ保存</button>
+      <button class="mi" onclick="importData()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>データ読込</button>
       <button class="mi" onclick="doHReset()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>履歴リセット</button>
       <button class="mi dng" onclick="doFReset()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>全リセット</button>
     </div>
   </div>
 </div></header>
+<div id="tInfo" class="t-info" style="display:none"></div>
 <main class="main">
   <div class="tabs"><button class="tb on" onclick="stab('d')" id="tD">抽選</button><button class="tb" onclick="stab('r')" id="tR">ランキング</button></div>
   <div id="pD">
@@ -114,6 +119,8 @@ let W={pp:10000,rpp:25000,op:350,rop:1800,npb:1200,nob:120,bp:80,plp:10,fp:10,fd
 let SC={wp:0,rp:1};
 let rankSort={col:"order",dir:1}; // dir: 1=asc, -1=desc
 let rankFilter="all"; // "all" or round number string
+let TN=""; // tournament name
+let TD=""; // tournament date
 
 function mid(s,n){return"p-"+s+"-"+n}function pk(a,b){return a<b?a+"|"+b:b+"|"+a}function tk(t){return pk(t.p[0],t.p[1])}
 function mck(mc){const t1=tk(mc.a),t2=tk(mc.b);return t1<t2?t1+"vs"+t2:t2+"vs"+t1}
@@ -197,14 +204,15 @@ e.innerHTML='<div class="card"><div class="ch"><span class="ct">ランキング<
 
 function toggleSort(col){if(rankSort.col===col){if(rankSort.dir===-1){rankSort.col="order";rankSort.dir=1}else{rankSort.dir=-1}}else{rankSort.col=col;rankSort.dir=col==="name"?1:-1}rRank()}
 
-function rAll(){uBdg();uBtn();rSP();rCand();rHist();rRank()}
+function uTInfo(){var e=document.getElementById("tInfo");if(!TN&&!TD){e.style.display="none";return}e.style.display="block";e.innerHTML=(TN?'<span class="tn">'+esc(TN)+'</span>':"")+(TD?'<span class="td">'+esc(TD)+'</span>':"")}
+function rAll(){uTInfo();uBdg();uBtn();rSP();rCand();rHist();rRank()}
 
 /* ═══ ACTIONS ═══ */
 function init(){P=parseP(PI);rAll()}
 function draw(){const a=aP();if(a.length<4){smsg("参加中4名未満");return}const nx=CR.length+1;if(!CR.length){CC=genR(a,nx);smsg("初回完全乱数で抽選しました。再度「抽選」で再抽選できます。")}else{const h=bS(CR);const pool=genO(a,h,nx);if(!pool.length){smsg("候補生成失敗");return}CC=pool[0];smsg("履歴考慮の抽選候補を生成しました。")}rAll()}
 function conf(){if(!CC){smsg("候補なし");return}const rec=toRec(CC);CR.push(rec);CC=null;smsg("第"+rec.rn+"試合を確定しました。");rAll()}
 function doHReset(){closeMenu();showC("履歴・得点・候補をリセットしますか？\nメンバーと参加状態は保持されます。",function(){CR=[];CC=null;RS={};rankFilter="all";smsg("履歴リセット完了");rAll()})}
-function doFReset(){closeMenu();showC("すべて初期状態に戻しますか？",function(){PI=IN.join("\n");P=parseP(PI);CR=[];CC=null;RS={};rankFilter="all";smsg("全リセット完了");rAll()})}
+function doFReset(){closeMenu();showC("すべて初期状態に戻しますか？",function(){PI=IN.join("\n");P=parseP(PI);CR=[];CC=null;RS={};rankFilter="all";TN="";TD="";smsg("全リセット完了");rAll()})}
 function showC(msg,fn){const ov=document.getElementById("cOv");ov.innerHTML='<div class="cbox"><div class="cmsg">'+esc(msg)+'</div><div class="cact"><button class="btn bs" onclick="document.getElementById(\'cOv\').style.display=\'none\'">キャンセル</button><button class="btn bp" id="cOk">実行</button></div></div>';ov.style.display="flex";document.getElementById("cOk").onclick=function(){ov.style.display="none";fn()};ov.onclick=function(e){if(e.target===ov)ov.style.display="none"}}
 
 function copyToClip(text,btn){
@@ -235,7 +243,8 @@ function closeMenu(){document.getElementById("menuDd").classList.remove("open")}
 
 /* ═══ MODALS ═══ */
 function openM(type,param){closeMenu();var ov=document.getElementById("mOv"),box=document.getElementById("mBx"),ti=document.getElementById("mTi"),bd=document.getElementById("mBd");box.classList.remove("wide");
-if(type==="participants"){ti.textContent="メンバー管理";bd.innerHTML='<div style="margin-bottom:12px"><label style="font-size:.83rem;font-weight:600;display:block;margin-bottom:4px">初期メンバー（1行1名）</label><textarea class="ta" id="mPI">'+esc(PI)+'</textarea><div class="sn">反映で履歴リセット</div></div><button class="btn bp" onclick="applyP()">反映</button><hr class="sdiv"><label style="font-size:.83rem;font-weight:600;display:block;margin-bottom:4px">途中参加追加</label><div class="ir"><input class="inp" id="mNN" placeholder="名前"><button class="btn bs" onclick="addP()">追加</button></div>'}
+if(type==="tournamentInfo"){ti.textContent="大会設定";bd.innerHTML='<div class="sfg"><h4>大会情報</h4><div class="sf"><label>大会名</label><input type="text" class="inp" style="width:200px;text-align:left" value="'+esc(TN)+'" id="mTN"></div><div class="sf"><label>開催日</label><input type="text" class="inp" style="width:200px;text-align:left" value="'+esc(TD)+'" id="mTD" placeholder="例: 2026/03/29"></div></div><button class="btn bp" onclick="TN=document.getElementById(\'mTN\').value.trim();TD=document.getElementById(\'mTD\').value.trim();smsg(\'大会設定を更新しました\');closeM();rAll()">反映</button>'}
+else if(type==="participants"){ti.textContent="メンバー管理";bd.innerHTML='<div style="margin-bottom:12px"><label style="font-size:.83rem;font-weight:600;display:block;margin-bottom:4px">初期メンバー（1行1名）</label><textarea class="ta" id="mPI">'+esc(PI)+'</textarea><div class="sn">反映で履歴リセット</div></div><button class="btn bp" onclick="applyP()">反映</button><hr class="sdiv"><label style="font-size:.83rem;font-weight:600;display:block;margin-bottom:4px">途中参加追加</label><div class="ir"><input class="inp" id="mNN" placeholder="名前"><button class="btn bs" onclick="addP()">追加</button></div>'}
 else if(type==="status"){ti.textContent="参加状態の変更";var a=aP(),n=iP();bd.innerHTML='<div class="pcols"><div class="pg"><h4><span style="color:var(--ok)">●</span> 参加中 ('+a.length+')</h4>'+(a.length?a.map(function(p){return'<div class="pr"><span>'+esc(p.name)+'</span><button class="btn bs" onclick="togS(\''+p.id+'\')">離脱</button></div>'}).join(""):'<div style="color:var(--tm);font-size:.83rem">なし</div>')+'</div><div class="pg"><h4><span style="color:var(--tm)">●</span> 休止中 ('+n.length+')</h4>'+(n.length?n.map(function(p){return'<div class="pr"><span>'+esc(p.name)+'</span><button class="btn bs" onclick="togS(\''+p.id+'\')">復帰</button></div>'}).join(""):'<div style="color:var(--tm);font-size:.83rem">なし</div>')+'</div></div>'}
 else if(type==="pairMatrix"||type==="oppMatrix"){var isPair=type==="pairMatrix";ti.textContent=isPair?"ペア回数マトリクス":"敵対回数マトリクス";box.classList.add("wide");var h=bS(CR);var rec=isPair?h.pc:h.oc;if(!P.length){bd.innerHTML='<div class="empty">メンバーなし</div>'}else{var mx=Math.max(1,...Object.values(rec));var rows=P.map(function(row){var cells=P.map(function(col){if(row.id===col.id)return'<td class="diag">-</td>';var v=rec[pk(row.id,col.id)]||0;var int=v?Math.min(1,v/mx):0;var bg=v?"rgba(192,57,43,"+(0.08+int*0.45)+")":"";var fw=v?"700":"400";var cl=v?(int>0.5?"#fff":"var(--dg)"):"";return'<td style="background:'+bg+";font-weight:"+fw+";color:"+cl+'">'+v+"</td>"}).join("");var sb=row.st==="i"?' <span class="badge bm" style="font-size:.6rem">休止</span>':"";return"<tr><td>"+esc(row.name)+sb+"</td>"+cells+"</tr>"}).join("");var hds=P.map(function(p){var sb=p.st==="i"?'<br><span class="badge bm" style="font-size:.55rem">休止</span>':"";return"<th>"+esc(p.name)+sb+"</th>"}).join("");bd.innerHTML='<div class="mw"><table class="mt"><thead><tr><th></th>'+hds+"</tr></thead><tbody>"+rows+"</tbody></table></div>"}}
 else if(type==="drawW"){ti.textContent="抽選スコア設定";var G=[["スコア計算",["pp","ペア重複ペナルティ"],["rpp","直近ペア重複ペナルティ"],["op","対戦重複ペナルティ"],["rop","直近対戦重複ペナルティ"],["npb","新規ペアボーナス"],["nob","新規対戦ボーナス"],["bp","待機偏りペナルティ"],["plp","出場偏りペナルティ"],["fp","公平性ペナルティ"],["fdp","交流多様性ペナルティ"],["mcp","同一カード重複ペナルティ"]],["待機者選定",["bw","待機回数重み"],["upw","未組相手重み"],["uow","未対戦相手重み"]],["ペア生成",["gpw","ペア重複重み"],["grpw","直近ペア重み"],["gnpb","新規ペアボーナス"],["gdw","多様性重み"]],["探索パラメータ",["iter","探索回数"],["topK","上位保持数"],["lip","局所改善回数"]]];var html="";for(var gi=0;gi<G.length;gi++){var g=G[gi];html+='<div class="sfg"><h4>'+g[0]+"</h4>";for(var fi=1;fi<g.length;fi++){var k=g[fi][0],l=g[fi][1];html+='<div class="sf"><label>'+l+'</label><input type="number" value="'+W[k]+'" onchange="W[\''+k+"']=+this.value\"></div>"}html+="</div>"}html+='<div class="sn">変更は次回抽選から反映。リロードで初期値に戻ります。</div>';bd.innerHTML=html}
@@ -275,6 +284,8 @@ function updB(rn,ci,pid,v){
   rRank();
 }
 
+function exportData(){closeMenu();var data={version:1,TN:TN,TD:TD,P:P,CR:CR,CC:CC,PI:PI,RS:RS,W:W,SC:SC,rankSort:rankSort,rankFilter:rankFilter};var json=JSON.stringify(data,null,2);var blob=new Blob([json],{type:"application/json"});var url=URL.createObjectURL(blob);var a=document.createElement("a");a.href=url;var fn="doubles_tournament";if(TN)fn+="_"+TN.replace(/[\\/:*?"<>|]/g,"_");if(TD)fn+="_"+TD.replace(/[\\/:*?"<>|]/g,"_");a.download=fn+".json";a.click();URL.revokeObjectURL(url);smsg("データを保存しました")}
+function importData(){closeMenu();var inp=document.createElement("input");inp.type="file";inp.accept=".json";inp.onchange=function(){var f=inp.files[0];if(!f)return;var reader=new FileReader();reader.onload=function(e){try{var data=JSON.parse(e.target.result);if(!data.version||!data.P){smsg("無効なデータファイル");return}TN=data.TN||"";TD=data.TD||"";P=data.P;CR=data.CR||[];CC=data.CC||null;PI=data.PI||"";RS=data.RS||{};if(data.W)W=data.W;if(data.SC)SC=data.SC;if(data.rankSort)rankSort=data.rankSort;rankFilter=data.rankFilter||"all";smsg("データを読み込みました");rAll()}catch(ex){smsg("読み込みエラー: "+ex.message)}};reader.readAsText(f)};inp.click()}
 function closeM(){document.getElementById("mOv").style.display="none"}
 function applyP(){var v=document.getElementById("mPI").value;PI=v;P=parseP(v);CR=[];CC=null;RS={};rankFilter="all";smsg(aP().length<4?"参加中4名未満":"メンバー"+P.length+"名反映");closeM();rAll()}
 function addP(){var n=document.getElementById("mNN").value.trim();if(!n)return;P.push({id:mid(P.length+1+CR.length*1000,n),name:n,st:"a"});PI=PI.trim()?PI+"\n"+n:n;CC=null;smsg(n+"を追加");closeM();rAll()}
