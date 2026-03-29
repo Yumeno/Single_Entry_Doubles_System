@@ -1,0 +1,28 @@
+name: Build download package
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'README.md'
+
+jobs:
+  build-zip:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create zip package
+        run: zip doubles_tournament_v1.zip index.html README.md
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add doubles_tournament_v1.zip
+          git diff --staged --quiet && echo "No changes" && exit 0
+          git commit -m "Update download package (doubles_tournament_v1.zip)"
+          git push
