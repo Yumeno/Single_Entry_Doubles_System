@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ダブルス交流大会 抽選アプリ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f7f5f0;--bgc:#fff;--bgm:#f0ede6;--bgo:rgba(30,28,24,.45);--tx:#2c2a26;--ts:#6b6760;--tm:#9e9a92;--ac:#c0392b;--al:#e8d5d2;--ah:#a93226;--bd:#e0dcd4;--bs:#ccc7bc;--ok:#27754a;--okb:#e8f5ee;--wn:#b8860b;--wnb:#fdf6e3;--dg:#c0392b;--dgb:#fbeae8;--ss:0 1px 3px rgba(0,0,0,.06);--sl:0 8px 30px rgba(0,0,0,.12);--r:12px;--rl:18px;--f:'Zen Kaku Gothic New','Noto Sans JP',sans-serif;--t:.2s ease}
+html{font-size:15px}body{font-family:var(--f);background:var(--bg);color:var(--tx);line-height:1.6;min-height:100vh}
+.hdr{background:var(--bgc);border-bottom:1px solid var(--bd);padding:0 20px;position:sticky;top:0;z-index:100;box-shadow:var(--ss)}.hdr-in{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:56px}.hdr-t{font-size:1.1rem;font-weight:700;display:flex;align-items:center;gap:8px}.hdr-t .ico{width:22px;height:22px;background:var(--ac);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700}.hdr-bg{display:flex;gap:6px;align-items:center}
+.badge{font-size:.73rem;padding:3px 10px;border-radius:20px;font-weight:500;white-space:nowrap}.bo{border:1px solid var(--bs);color:var(--ts)}.ba{background:var(--al);color:var(--ac)}.bm{background:var(--bgm);color:var(--ts)}.bok{background:var(--okb);color:var(--ok)}.bd{background:var(--dgb);color:var(--dg)}
+.ham{width:40px;height:40px;background:none;border:1px solid var(--bd);border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:var(--t)}.ham:hover{background:var(--bgm)}.ham span{display:block;width:18px;height:2px;background:var(--tx);border-radius:2px}
+.mdd{position:absolute;top:52px;right:0;background:var(--bgc);border:1px solid var(--bd);border-radius:var(--r);box-shadow:var(--sl);min-width:240px;z-index:200;display:none;overflow:hidden}.mdd.open{display:block;animation:fs .15s ease}
+.mi{display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:.86rem;cursor:pointer;border:none;background:none;width:100%;text-align:left;color:var(--tx);font-family:var(--f);transition:var(--t)}.mi:hover{background:var(--bgm)}.mi+.mi{border-top:1px solid var(--bd)}.mi svg{width:17px;height:17px;flex-shrink:0}.mi.dng{color:var(--dg)}
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--bd);margin-bottom:18px}.tb{padding:10px 24px;font-size:.9rem;font-weight:600;cursor:pointer;border:none;background:none;color:var(--tm);border-bottom:2px solid transparent;margin-bottom:-2px;transition:var(--t);font-family:var(--f)}.tb:hover{color:var(--ts)}.tb.on{color:var(--ac);border-bottom-color:var(--ac)}
+.main{max-width:960px;margin:0 auto;padding:20px 20px 80px}
+.msg{padding:11px 15px;border-radius:var(--r);font-size:.84rem;background:var(--bgm);border:1px solid var(--bd);color:var(--ts);margin-bottom:14px;line-height:1.5}
+.ar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 17px;border-radius:var(--r);font-size:.86rem;font-weight:600;cursor:pointer;border:none;transition:var(--t);font-family:var(--f);white-space:nowrap}.btn:disabled{opacity:.35;cursor:not-allowed}.bp{background:var(--ac);color:#fff}.bp:hover:not(:disabled){background:var(--ah)}.bs{background:var(--bgc);color:var(--tx);border:1px solid var(--bs)}.bs:hover:not(:disabled){background:var(--bgm)}.btn svg{width:15px;height:15px}
+.bc{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:8px;font-size:.72rem;font-weight:500;cursor:pointer;border:1px solid var(--bs);background:var(--bgc);color:var(--ts);transition:var(--t);font-family:var(--f);white-space:nowrap;flex-shrink:0}.bc:hover{background:var(--bgm)}.bc.ok{background:var(--okb);border-color:#b8dfc8;color:var(--ok)}.bc svg{width:13px;height:13px}
+.card{background:var(--bgc);border:1px solid var(--bd);border-radius:var(--rl);box-shadow:var(--ss);margin-bottom:16px;overflow:hidden}.ch{padding:15px 17px 0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}.ct{font-size:1rem;font-weight:700}.cb{padding:13px 17px 17px}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:7px;margin-bottom:12px}.sb{background:var(--bgm);border-radius:var(--r);padding:9px 10px;text-align:center}.sb .l{font-size:.73rem;color:var(--tm)}.sb .v{font-size:1.25rem;font-weight:700}
+.pn{padding:9px 13px;border-radius:var(--r);font-size:.83rem;margin-bottom:12px}.pn.gd{background:var(--okb);border:1px solid #b8dfc8;color:var(--ok)}.pn.wn{background:var(--wnb);border:1px solid #e8d6a0;color:#8b6914}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}@media(max-width:600px){.dg{grid-template-columns:1fr}}
+.ds{border:1px solid var(--bd);border-radius:var(--r);padding:11px}.ds h4{font-size:.8rem;font-weight:600;margin-bottom:5px;color:var(--ts)}
+.di{padding:4px 9px;background:var(--bgm);border-radius:8px;margin-bottom:3px;font-size:.83rem;display:flex;align-items:center;gap:5px;flex-wrap:wrap;word-break:break-all;overflow-wrap:anywhere}
+.scg{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:5px}.sci{background:var(--bgm);border-radius:8px;padding:5px 9px;font-size:.78rem}.sci .l{color:var(--tm)}.sci .v{font-weight:600}
+.hg{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}@media(max-width:600px){.hg{grid-template-columns:1fr}}
+.hi{border:1px solid var(--bd);border-radius:var(--r);padding:13px}.hi h4{font-size:.9rem;font-weight:600;margin-bottom:2px}.hi .tm{font-size:.73rem;color:var(--tm);margin-bottom:7px}
+.hs{margin-bottom:5px}.hs .hl{font-size:.78rem;font-weight:600;color:var(--ts);margin-bottom:2px}.hs .hv{font-size:.83rem;word-break:break-all;overflow-wrap:anywhere}
+.hsep{border:none;border-top:1px solid var(--bd);margin:6px 0}
+.hhr{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:7px}.hhr .left{flex:1;min-width:0}
+.hmr{padding:3px 0;font-size:.83rem;word-break:break-all;overflow-wrap:anywhere;line-height:1.5}.hmn{font-weight:600;color:var(--ts);margin-right:3px;white-space:nowrap}.hvs{display:inline-block;padding:1px 5px;font-size:.7rem;font-weight:700;color:var(--ac);background:var(--al);border-radius:4px;margin:0 3px;vertical-align:middle}
+.hi-actions{display:flex;gap:5px;flex-shrink:0}
+.hi-score-badge{font-size:.7rem;padding:2px 8px;border-radius:10px;font-weight:600}
+.sp{margin-bottom:14px}.spr{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;margin-bottom:4px}.spl{font-size:.78rem;font-weight:600;color:var(--ts);margin-right:3px}
+.sc{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:.73rem;font-weight:500;background:var(--bgm);color:var(--tx);border:1px solid var(--bd);white-space:nowrap;max-width:170px;overflow:hidden;text-overflow:ellipsis}.sc.off{background:var(--bg);color:var(--tm);border-style:dashed;text-decoration:line-through}
+.mo{position:fixed;inset:0;background:var(--bgo);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;animation:fi .12s ease}
+.md{background:var(--bgc);border-radius:var(--rl);box-shadow:var(--sl);width:100%;max-width:700px;max-height:85vh;display:flex;flex-direction:column;animation:si .18s ease}.md.wide{max-width:95vw}
+.mdh{padding:15px 17px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}.mdh h2{font-size:1.02rem;font-weight:700}
+.mx{width:30px;height:30px;border-radius:8px;border:none;background:var(--bgm);cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;color:var(--ts);transition:var(--t)}.mx:hover{background:var(--bd)}
+.mdb{padding:17px;overflow-y:auto;flex:1}
+.ta{width:100%;min-height:170px;padding:10px;border:1px solid var(--bd);border-radius:var(--r);font-family:var(--f);font-size:.86rem;resize:vertical;line-height:1.7;background:var(--bg);color:var(--tx)}.ta:focus{outline:none;border-color:var(--ac)}
+.inp{padding:8px 11px;border:1px solid var(--bd);border-radius:var(--r);font-family:var(--f);font-size:.86rem;background:var(--bg);color:var(--tx);flex:1}.inp:focus{outline:none;border-color:var(--ac)}
+.ir{display:flex;gap:8px;margin-bottom:12px}
+.pcols{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:550px){.pcols{grid-template-columns:1fr}}
+.pg{border:1px solid var(--bd);border-radius:var(--r);padding:11px}.pg h4{font-size:.83rem;font-weight:600;margin-bottom:7px;display:flex;align-items:center;gap:5px}
+.pr{display:flex;align-items:center;justify-content:space-between;padding:5px 9px;border-radius:8px;margin-bottom:3px;font-size:.83rem;background:var(--bgm);word-break:break-all;overflow-wrap:anywhere}.pr .btn{padding:3px 9px;font-size:.73rem;flex-shrink:0}
+.sdiv{border:none;border-top:1px solid var(--bd);margin:12px 0}.sn{font-size:.73rem;color:var(--tm);margin-top:4px}.empty{text-align:center;padding:32px 20px;color:var(--tm);font-size:.86rem}
+.mw{overflow:auto;max-height:70vh}.mt{border-collapse:collapse;font-size:.78rem;white-space:nowrap}.mt th,.mt td{border:1px solid var(--bd);padding:4px 7px;text-align:center}.mt th{background:var(--bgm);font-weight:600;position:sticky;top:0;z-index:2}.mt th:first-child{position:sticky;left:0;z-index:3}.mt td:first-child{position:sticky;left:0;background:var(--bgm);font-weight:600;text-align:left;z-index:1}.mt .diag{background:var(--bgm);color:var(--tm)}
+.sf{display:grid;grid-template-columns:1fr auto;gap:7px;align-items:center;margin-bottom:6px}.sf label{font-size:.83rem;color:var(--ts)}.sf input{width:85px;padding:5px 7px;border:1px solid var(--bd);border-radius:8px;font-family:var(--f);font-size:.83rem;text-align:right}.sf input:focus{outline:none;border-color:var(--ac)}.sfg{margin-bottom:14px}.sfg h4{font-size:.88rem;font-weight:600;margin-bottom:7px;padding-bottom:3px;border-bottom:1px solid var(--bd)}
+.co{position:fixed;inset:0;background:var(--bgo);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;animation:fi .12s ease}
+.cbox{background:var(--bgc);border-radius:var(--rl);box-shadow:var(--sl);padding:22px 20px 17px;max-width:380px;width:100%;animation:si .18s ease;text-align:center}.cbox .cmsg{font-size:.9rem;line-height:1.6;margin-bottom:16px;white-space:pre-line}.cbox .cact{display:flex;gap:10px;justify-content:center}
+/* Ranking */
+.rw{overflow-x:auto}
+.rtbl{width:100%;border-collapse:collapse;font-size:.83rem}.rtbl th,.rtbl td{border:1px solid var(--bd);padding:7px 9px;text-align:center}.rtbl th{background:var(--bgm);font-weight:600;position:sticky;top:0;cursor:pointer;user-select:none;white-space:nowrap}.rtbl th:hover{background:var(--bd)}.rtbl td:nth-child(2),.rtbl th:nth-child(2){text-align:left}
+.r1{background:#fef3c7;font-weight:700}.r2{background:#f0f0f0;font-weight:600}.r3{background:#fde8d8;font-weight:600}
+.rt{font-weight:700;color:var(--ac)}.rd{font-size:.76rem;color:var(--ts)}
+.rank-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.rank-controls select{padding:6px 10px;border:1px solid var(--bd);border-radius:8px;font-family:var(--f);font-size:.83rem;background:var(--bg);color:var(--tx)}.rank-controls select:focus{outline:none;border-color:var(--ac)}
+.rank-controls label{font-size:.82rem;color:var(--ts);font-weight:600}
+.sort-arrow{font-size:.7rem;margin-left:3px;opacity:.6}
+/* Score input modal */
+.sc-card{border:1px solid var(--bd);border-radius:var(--r);padding:12px;margin-bottom:12px}
+.sc-card h4{font-size:.88rem;font-weight:600;margin-bottom:8px}
+.sc-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:.84rem;flex-wrap:wrap}
+.sc-row label{color:var(--ts);min-width:0;flex:1;word-break:break-all;overflow-wrap:anywhere}
+.sc-row input[type=number]{width:60px;padding:5px 6px;border:1px solid var(--bd);border-radius:6px;font-size:.84rem;font-family:var(--f);text-align:center}.sc-row input:focus{outline:none;border-color:var(--ac)}
+.sc-row .win-tag{font-size:.68rem;padding:2px 7px;border-radius:10px;font-weight:700;background:var(--ac);color:#fff}
+.sc-sep{border:none;border-top:1px solid var(--bd);margin:8px 0}
+.sc-bonus{font-size:.82rem;margin-top:4px}
+.sc-bonus label{color:var(--ts);margin-right:4px}
+@keyframes fi{from{opacity:0}to{opacity:1}}@keyframes si{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}@keyframes fs{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:500px){html{font-size:14px}.hdr-bg{display:none}.ar{gap:5px}.btn{padding:7px 11px;font-size:.82rem}.sg{grid-template-columns:repeat(3,1fr)}.hg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="hdr"><div class="hdr-in">
+  <div class="hdr-t"><span class="ico">D</span>ダブルス交流大会</div>
+  <div class="hdr-bg" id="hB"></div>
+  <div style="position:relative">
+    <button class="ham" id="menuBtn" aria-label="メニュー"><span></span><span></span><span></span></button>
+    <div class="mdd" id="menuDd">
+      <button class="mi" onclick="openM('participants')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>メンバー管理</button>
+      <button class="mi" onclick="openM('status')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 11l-3 3-3-3"/></svg>参加状態の変更</button>
+      <button class="mi" onclick="openM('pairMatrix')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>ペア回数マトリクス</button>
+      <button class="mi" onclick="openM('oppMatrix')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>敵対回数マトリクス</button>
+      <button class="mi" onclick="openM('drawW')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>抽選スコア設定</button>
+      <button class="mi" onclick="openM('scoreC')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06c.5.5 1.2.7 1.82.33a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09c.1.7.5 1.3 1 1.51.6.37 1.3.17 1.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06c-.5.5-.7 1.2-.33 1.82.2.5.8.9 1.51 1H21a2 2 0 010 4h-.09c-.7.1-1.3.5-1.51 1z"/></svg>得点配分設定</button>
+      <button class="mi" onclick="doHReset()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>履歴リセット</button>
+      <button class="mi dng" onclick="doFReset()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>全リセット</button>
+    </div>
+  </div>
+</div></header>
+<main class="main">
+  <div class="tabs"><button class="tb on" onclick="stab('d')" id="tD">抽選</button><button class="tb" onclick="stab('r')" id="tR">ランキング</button></div>
+  <div id="pD">
+    <div class="msg" id="msgB">参加者を確認して「抽選」を押してください。☰ からメンバー管理ができます。</div>
+    <div id="sP" class="sp"></div>
+    <div class="ar"><button class="btn bp" id="bD" onclick="draw()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>抽選</button><button class="btn bs" id="bC" onclick="conf()" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>確定</button></div>
+    <div id="cA"></div><div id="hA"></div>
+  </div>
+  <div id="pR" style="display:none"><div id="rA"></div></div>
+</main>
+<div id="mOv" class="mo" style="display:none" onclick="if(event.target===this)closeM()"><div class="md" id="mBx" onclick="event.stopPropagation()"><div class="mdh"><h2 id="mTi"></h2><button class="mx" onclick="closeM()">&times;</button></div><div class="mdb" id="mBd"></div></div></div>
+<div id="cOv" class="co" style="display:none"></div>
+
+<script>
+const IN=["田中","佐藤","鈴木","高橋","伊藤","渡辺","山本","中村"];
+let P=[],CR=[],CC=null,PI=IN.join("\n"),RS={};
+let W={pp:10000,rpp:25000,op:350,rop:1800,npb:1200,nob:120,bp:80,plp:10,fp:10,fdp:18,mcp:20000,bw:8,upw:4,uow:2,gpw:10000,grpw:22000,gnpb:900,gdw:12,iter:2500,topK:8,lip:3};
+let SC={wp:0,rp:1};
+let rankSort={col:"order",dir:1}; // dir: 1=asc, -1=desc
+let rankFilter="all"; // "all" or round number string
+
+function mid(s,n){return"p-"+s+"-"+n}function pk(a,b){return a<b?a+"|"+b:b+"|"+a}function tk(t){return pk(t.p[0],t.p[1])}
+function mck(mc){const t1=tk(mc.a),t2=tk(mc.b);return t1<t2?t1+"vs"+t2:t2+"vs"+t1}
+function nm(id){const p=P.find(x=>x.id===id);return p?p.name:id}function tl(t){return nm(t.p[0])+" / "+nm(t.p[1])}function pl(a,b){return nm(a)+" / "+nm(b)}function nms(ids){return ids.map(nm)}
+function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML}
+function shuf(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=0|Math.random()*(i+1);[r[i],r[j]]=[r[j],r[i]]}return r}
+function pwm(items,fn){const sc=items.map(i=>({i,s:fn(i)}));const mn=Math.min(...sc.map(x=>x.s));const ws=sc.map(x=>({i:x.i,w:1/(1+Math.max(0,x.s-mn))}));const t=ws.reduce((a,x)=>a+x.w,0);let r=Math.random()*t;for(const x of ws){r-=x.w;if(r<=0)return x.i}return ws[ws.length-1].i}
+function parseP(inp){return inp.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map((n,i)=>({id:mid(i+1,n),name:n,st:"a"}))}
+function aP(){return P.filter(p=>p.st==="a")}function iP(){return P.filter(p=>p.st==="i")}
+function eS(){const s={pc:{},oc:{},plc:{},bc:{},ps:{},os:{},rpc:{},roc:{},mcc:{}};for(const p of P){s.plc[p.id]=0;s.bc[p.id]=0;s.ps[p.id]=new Set();s.os[p.id]=new Set()}return s}
+function bS(rounds){const s=eS();const rec=rounds.slice(-2);for(const r of rounds){for(const id of r.ai)s.plc[id]=(s.plc[id]||0)+1;for(const id of r.wi)s.bc[id]=(s.bc[id]||0)+1;for(const t of r.teams){const[a,b]=t.p;const k=pk(a,b);s.pc[k]=(s.pc[k]||0)+1;(s.ps[a]||(s.ps[a]=new Set())).add(b);(s.ps[b]||(s.ps[b]=new Set())).add(a)}for(const c of r.mc)for(const x of c.a.p)for(const y of c.b.p){const k=pk(x,y);s.oc[k]=(s.oc[k]||0)+1;(s.os[x]||(s.os[x]=new Set())).add(y);(s.os[y]||(s.os[y]=new Set())).add(x)}for(const c of r.mc){const mk=mck(c);s.mcc[mk]=(s.mcc[mk]||0)+1}}
+for(const r of rec){for(const t of r.teams){const k=pk(t.p[0],t.p[1]);s.rpc[k]=(s.rpc[k]||0)+1}for(const c of r.mc)for(const x of c.a.p)for(const y of c.b.p){const k=pk(x,y);s.roc[k]=(s.roc[k]||0)+1}}return s}
+function mv(r){const v=Object.values(r);return v.length?Math.min(...v):0}
+function scCand(c,h){let pp=0,op=0,rp=0,bp=0,plp=0,fp=0,npb=0,nob=0,rPs=0,rOs=0,nPs=0,nOs=0;const rpD=[];for(const id of c.wi){bp+=(h.bc[id]||0)*W.bp;plp+=Math.max(0,(h.plc[id]||0)-mv(h.plc))*W.plp}const ac=c.ai.map(id=>h.plc[id]||0);if(ac.length)fp+=(Math.max(...ac)-Math.min(...ac))*W.fp;for(const t of c.teams){const[a,b]=t.p;const k=pk(a,b);const cnt=h.pc[k]||0;const rc=h.rpc[k]||0;pp+=cnt*W.pp;rp+=rc*W.rpp;if(cnt>0){rPs++;rpD.push({l:pl(a,b),c:cnt})}else{nPs++;npb+=W.npb}fp+=Math.max(0,2-(h.ps[a]?.size||0))*W.fdp;fp+=Math.max(0,2-(h.ps[b]?.size||0))*W.fdp}for(const c2 of c.mc)for(const x of c2.a.p)for(const y of c2.b.p){const k=pk(x,y);const cnt=h.oc[k]||0;const rc=h.roc[k]||0;op+=cnt*W.op;rp+=rc*W.rop;if(cnt>0)rOs++;else{nOs++;nob+=W.nob}}var mcp=0;for(const c2 of c.mc){const mk=mck(c2);mcp+=(h.mcc[mk]||0)*W.mcp}const fp2=(()=>{const w=[...c.wi].sort().join(",");const cs=c.mc.map(c2=>{const t1=tk(c2.a),t2=tk(c2.b);return t1<t2?t1+" vs "+t2:t2+" vs "+t1}).sort().join("||");return w+"###"+cs})();return{...c,score:pp+op+rp+bp+plp+fp+mcp-npb-nob,sbd:{pp,op,rp,bp,plp,fp,npb,nob,mcp},sum:{rPs,rOs,nPs,nOs},rpD,fp:fp2}}
+function genR(act,rn){const sh=shuf(act.map(p=>p.id));const wc=sh.length%4;const wi=sh.slice(0,wc),ai=sh.slice(wc);const teams=[];for(let i=0;i<ai.length;i+=2)teams.push({p:[ai[i],ai[i+1]]});const st=shuf(teams);const mc=[];for(let i=0;i<st.length;i+=2)mc.push({a:st[i],b:st[i+1]});return scCand({rn,mode:"r",ai,wi,teams,mc},eS())}
+function selW(act,h,wc){if(wc<=0)return[];const rem=[...act.map(p=>p.id)];const w=[];while(w.length<wc&&rem.length>0){const ch=pwm(rem,id=>{const bye=h.bc[id]||0,play=h.plc[id]||0,uP=act.length-1-(h.ps[id]?.size||0),uO=act.length-1-(h.os[id]?.size||0);return bye*W.bw-play-uP*W.upw-uO*W.uow+Math.random()*3});w.push(ch);rem.splice(rem.indexOf(ch),1)}return w}
+function chAnc(un,act,h){const n=act.length;return[...un].sort((a,b)=>{const aU=n-1-(h.ps[a]?.size||0),bU=n-1-(h.ps[b]?.size||0);const aR=Object.keys(h.rpc).filter(k=>k.split("|").includes(a)).length,bR=Object.keys(h.rpc).filter(k=>k.split("|").includes(b)).length;return aU*5-aR*2+Math.random()-(bU*5-bR*2+Math.random())})[0]}
+function genTG(ai,act,h){const un=[...ai];const teams=[];while(un.length>0){const a=chAnc(un,act,h);un.splice(un.indexOf(a),1);const b=pwm(un,id=>{const k=pk(a,id);const pc=h.pc[k]||0;const rpc=h.rpc[k]||0;const nw=pc===0?1:0;const aU=act.length-1-(h.ps[a]?.size||0);const bU=act.length-1-(h.ps[id]?.size||0);return pc*W.gpw+rpc*W.grpw-nw*W.gnpb-(aU+bU)*W.gdw+Math.random()*25});un.splice(un.indexOf(b),1);teams.push({p:[a,b]})}return teams}
+function allPr(teams){if(!teams.length)return[[]];const[f,...rest]=teams;const res=[];for(let i=0;i<rest.length;i++){const o=rest[i];const rem=rest.filter((_,j)=>j!==i);for(const tail of allPr(rem))res.push([{a:f,b:o},...tail])}return res}
+function scMC(cards,h){let s=0;for(const c of cards)for(const x of c.a.p)for(const y of c.b.p){const k=pk(x,y);s+=(h.oc[k]||0)*300+(h.roc[k]||0)*1800;if(!(h.oc[k]||0))s-=100}return s}
+function bMC(teams,h){const poss=allPr(shuf(teams));let best=poss[0]||[],bsc=Infinity;for(const p of poss){const s=scMC(p,h)+Math.random()*2;if(s<bsc){best=p;bsc=s}}return best}
+function clT(t){return t.map(x=>({p:[x.p[0],x.p[1]]}))}function scTO(teams,h){let s=0;for(const t of teams){const k=tk(t);s+=(h.pc[k]||0)*W.gpw+(h.rpc[k]||0)*W.grpw;if(!(h.pc[k]||0))s-=600}return s}
+function impT(teams,h,passes){let cur=clT(teams),imp=true,rem=passes;while(imp&&rem>0){imp=false;rem--;for(let i=0;i<cur.length;i++)for(let j=i+1;j<cur.length;j++){const[a,b]=cur[i].p,[c,d]=cur[j].p;const vars=[cur.map((t,x)=>x===i?{p:[a,c]}:x===j?{p:[b,d]}:{p:[t.p[0],t.p[1]]}),cur.map((t,x)=>x===i?{p:[a,d]}:x===j?{p:[b,c]}:{p:[t.p[0],t.p[1]]})];const cs=scTO(cur,h);for(const v of vars){if(scTO(v,h)+1e-6<cs){cur=v;imp=true;break}}if(imp)break}if(imp)continue}return cur}
+function genO(act,h,rn){const wc=act.length%4;const map=new Map();for(let i=0;i<W.iter;i++){const wi=selW(act,h,wc);const wS=new Set(wi);const ai=act.map(p=>p.id).filter(id=>!wS.has(id));let teams=genTG(shuf(ai),act,h);teams=impT(teams,h,W.lip);const mc=bMC(teams,h);const c=scCand({rn,mode:"o",ai,wi,teams,mc},h);const ex=map.get(c.fp);if(!ex||c.score<ex.score)map.set(c.fp,c)}return[...map.values()].sort((a,b)=>a.score-b.score).slice(0,W.topK)}
+function toRec(c){const aS=new Set(c.ai),wS=new Set(c.wi);return{rn:c.rn,at:new Date().toLocaleString("ja-JP"),ai:c.ai,ii:P.filter(p=>p.st==="i"&&!aS.has(p.id)&&!wS.has(p.id)).map(p=>p.id),wi:c.wi,teams:c.teams,mc:c.mc}}
+
+/* ═══ UI ═══ */
+function smsg(m){document.getElementById("msgB").textContent=m}
+function uBdg(){const e=document.getElementById("hB");const a=aP().length,n=iP().length,nx=CR.length+1;e.innerHTML=`<span class="badge bo">参加中 ${a}名</span>`+(n?`<span class="badge bm">休止 ${n}名</span>`:"")+`<span class="badge ba">第${nx}試合</span>`}
+function uBtn(){document.getElementById("bD").disabled=aP().length<4;document.getElementById("bC").disabled=!CC}
+function rSP(){const e=document.getElementById("sP");const a=aP(),n=iP();if(!P.length){e.innerHTML="";return}let h='<div class="spr"><span class="spl">参加中 ('+a.length+'):</span>';h+=a.length?a.map(p=>`<span class="sc" title="${esc(p.name)}">${esc(p.name)}</span>`).join(""):'<span style="font-size:.78rem;color:var(--tm)">なし</span>';h+='</div>';if(n.length){h+='<div class="spr"><span class="spl">休止中 ('+n.length+'):</span>';h+=n.map(p=>`<span class="sc off" title="${esc(p.name)}">${esc(p.name)}</span>`).join("")+'</div>'}e.innerHTML=h}
+
+function rCand(){const e=document.getElementById("cA");if(!CC){e.innerHTML="";return}const c=CC,s=c.sbd;
+let pn="";if(c.rpD.length)pn='<div class="pn wn"><b>同一ペアあり</b>'+c.rpD.map(d=>"<div>・"+d.l+"（過去"+d.c+"回）</div>").join("")+"</div>";else pn='<div class="pn gd">過去と重複するペアなし</div>';
+e.innerHTML='<div class="card"><div class="ch"><span class="ct">第'+c.rn+'試合 候補</span><div style="display:flex;gap:5px"><span class="badge '+(c.mode==="r"?"bm":"ba")+'">'+(c.mode==="r"?"完全乱数":"履歴考慮")+'</span><span class="badge bo">Score '+c.score+'</span></div></div><div class="cb"><div class="sg"><div class="sb"><div class="l">新規ペア</div><div class="v">'+c.sum.nPs+'</div></div><div class="sb"><div class="l">ペア重複</div><div class="v">'+c.sum.rPs+'</div></div><div class="sb"><div class="l">対戦重複</div><div class="v">'+c.sum.rOs+'</div></div></div>'+pn+'<div class="dg"><div class="ds"><h4>対戦カード</h4>'+c.mc.map((mc,i)=>'<div class="di">第'+(i+1)+": "+esc(tl(mc.a))+'<span class="hvs">vs</span>'+esc(tl(mc.b))+"</div>").join("")+'</div><div class="ds"><h4>ペア一覧</h4>'+c.teams.map((t,i)=>{const rep=c.rpD.find(d=>d.l===pl(t.p[0],t.p[1]));return'<div class="di">ペア'+(i+1)+": "+esc(tl(t))+" "+(rep?'<span class="badge bd">重複('+rep.c+'回)</span>':"")+"</div>"}).join("")+"</div></div>"+(c.wi.length?'<div class="ds" style="margin-bottom:10px"><h4>待機者</h4>'+c.wi.map(id=>'<span class="badge bm" style="margin:2px">'+nm(id)+"</span>").join("")+"</div>":"")+'<div class="ds"><h4>スコア内訳</h4><div class="scg"><div class="sci"><span class="l">ペア重複</span> <span class="v">'+s.pp+'</span></div><div class="sci"><span class="l">対戦重複</span> <span class="v">'+s.op+'</span></div><div class="sci"><span class="l">直近重複</span> <span class="v">'+s.rp+'</span></div><div class="sci"><span class="l">待機偏り</span> <span class="v">'+s.bp+'</span></div><div class="sci"><span class="l">出場偏り</span> <span class="v">'+s.plp+'</span></div><div class="sci"><span class="l">公平性</span> <span class="v">'+s.fp+'</span></div><div class="sci"><span class="l">新規ペアB</span> <span class="v">-'+s.npb+'</span></div><div class="sci"><span class="l">新規対戦B</span> <span class="v">-'+s.nob+'</span></div><div class="sci"><span class="l">同一カード</span> <span class="v">'+s.mcp+'</span></div></div></div></div></div>'}
+
+function hasScoreForRound(rn){const sd=RS[rn];if(!sd)return false;return Object.values(sd).some(c=>c.ar!==""&&c.br!=="")}
+
+function rHist(){const e=document.getElementById("hA");if(!CR.length){e.innerHTML='<div class="card"><div class="ch"><span class="ct">確定済み履歴</span></div><div class="cb"><div class="empty">まだ確定済みの試合はありません。</div></div></div>';return}
+const items=[...CR].reverse().map(r=>{const rn=r.rn;const scored=hasScoreForRound(rn);
+const mrows=r.mc.map((mc,ci)=>{const sd=RS[rn]?.[ci];const aR=sd?.ar??"";const bR=sd?.br??"";const aW=aR!==""&&bR!==""&&+aR>+bR;const bW=aR!==""&&bR!==""&&+bR>+aR;
+let scoreText="";if(aR!==""&&bR!=="")scoreText=' <span style="font-weight:700;margin-left:6px">('+aR+'-'+bR+')</span>'+(aW?' <span class="badge bok" style="font-size:.66rem">WIN←</span>':'')+(bW?' <span class="badge bok" style="font-size:.66rem">→WIN</span>':"");
+return'<div class="hmr"><span class="hmn">'+(ci+1)+".</span>"+esc(tl(mc.a))+'<span class="hvs">vs</span>'+esc(tl(mc.b))+scoreText+"</div>"}).join("");
+const prows=r.teams.map((t,i)=>'<div class="hmr"><span class="hmn">'+(i+1)+".</span>"+esc(tl(t))+"</div>").join("");
+return'<div class="hi"><div class="hhr"><div class="left"><h4>第'+rn+'試合</h4><div class="tm">'+r.at+'</div></div><div class="hi-actions"><button class="bc" onclick="openM(\'scoreInput\','+rn+')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'+(scored?"編集":"得点入力")+'</button><button class="bc" onclick="cpR('+rn+',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>コピー</button></div></div><div class="hs"><div class="hl">対戦カード</div>'+mrows+'</div><hr class="hsep"><div class="hs"><div class="hl">ペア</div>'+prows+"</div>"+(r.wi.length?'<hr class="hsep"><div class="hs"><div class="hl">待機者</div><div class="hv">'+esc(nms(r.wi).join("、"))+"</div></div>":"")+(r.ii.length?'<hr class="hsep"><div class="hs"><div class="hl">不参加</div><div class="hv">'+esc(nms(r.ii).join("、"))+"</div></div>":"")+"</div>"}).join("");
+e.innerHTML='<div class="card"><div class="ch"><span class="ct">確定済み履歴</span></div><div class="cb"><div class="hg">'+items+"</div></div></div>"}
+
+function calcStats(filterRn){
+  const stats={};for(const p of P)stats[p.id]={id:p.id,name:p.name,order:P.indexOf(p),tw:0,tr:0,tb:0,m:0};
+  const rounds=filterRn==="all"?CR:CR.filter(r=>r.rn===+filterRn);
+  for(const r of rounds){r.mc.forEach((mc,ci)=>{const sd=RS[r.rn]?.[ci];if(!sd||sd.ar===""||sd.br==="")return;const aR=+sd.ar,bR=+sd.br;const aW=aR>bR?1:0,bW=bR>aR?1:0;
+  for(const id of mc.a.p){if(!stats[id])continue;stats[id].tw+=aW;stats[id].tr+=aR;stats[id].m++;stats[id].tb+=(sd.bonus?.[id]||0)}
+  for(const id of mc.b.p){if(!stats[id])continue;stats[id].tw+=bW;stats[id].tr+=bR;stats[id].m++;stats[id].tb+=(sd.bonus?.[id]||0)}})}
+  return Object.values(stats).map(s=>({...s,total:s.tw*SC.wp+s.tr*SC.rp+s.tb}));
+}
+
+function rRank(){const e=document.getElementById("rA");
+const roundOptions=CR.map(r=>r.rn);
+let arr=calcStats(rankFilter);
+// sort
+const col=rankSort.col,dir=rankSort.dir;
+if(col==="order")arr.sort((a,b)=>(a.order-b.order)*dir);
+else if(col==="name")arr.sort((a,b)=>a.name.localeCompare(b.name,"ja")*dir);
+else if(col==="m")arr.sort((a,b)=>(a.m-b.m)*dir);
+else if(col==="tw")arr.sort((a,b)=>(a.tw-b.tw)*dir);
+else if(col==="tr")arr.sort((a,b)=>(a.tr-b.tr)*dir);
+else if(col==="tb")arr.sort((a,b)=>(a.tb-b.tb)*dir);
+else if(col==="total")arr.sort((a,b)=>(a.total-b.total)*dir);
+
+const hasD=arr.some(r=>r.m>0);
+const filterHtml='<div class="rank-controls"><label>表示:</label><select onchange="rankFilter=this.value;rRank()"><option value="all"'+(rankFilter==="all"?" selected":"")+'>累計</option>'+roundOptions.map(rn=>'<option value="'+rn+'"'+(rankFilter===String(rn)?" selected":"")+'>第'+rn+'試合</option>').join("")+'</select><span style="font-size:.76rem;color:var(--ts)">勝利='+SC.wp+'pt / 1R='+SC.rp+'pt</span></div>';
+
+if(!hasD){e.innerHTML='<div class="card"><div class="ch"><span class="ct">ランキング</span></div><div class="cb">'+filterHtml+'<div class="empty">スコア未入力です。<br>抽選タブの確定済み試合から得点入力してください。</div></div></div>';return}
+
+function thHtml(label,colKey){const arrow=rankSort.col===colKey?(rankSort.dir===1?'<span class="sort-arrow">▲</span>':'<span class="sort-arrow">▼</span>'):'';return'<th onclick="toggleSort(\''+colKey+'\')">'+label+arrow+'</th>'}
+
+const rows=arr.map(r=>{const winPts=r.tw*SC.wp;const rndPts=r.tr*SC.rp;const detail="勝利"+winPts+" + R"+rndPts+" + bonus"+r.tb;
+return"<tr><td>"+esc(r.name)+"</td><td>"+r.m+"</td><td>"+r.tw+"</td><td>"+r.tr+"</td><td>"+r.tb+'</td><td class="rt">'+r.total+'</td><td class="rd">'+detail+"</td></tr>"}).join("");
+
+e.innerHTML='<div class="card"><div class="ch"><span class="ct">ランキング</span></div><div class="cb">'+filterHtml+'<div class="rw"><table class="rtbl"><thead><tr>'+thHtml("名前","name")+thHtml("試合","m")+thHtml("勝利","tw")+thHtml("総R","tr")+thHtml("bonus","tb")+thHtml("合計","total")+'<th>内訳</th></tr></thead><tbody>'+rows+"</tbody></table></div></div></div>"}
+
+function toggleSort(col){if(rankSort.col===col){if(rankSort.dir===-1){rankSort.col="order";rankSort.dir=1}else{rankSort.dir=-1}}else{rankSort.col=col;rankSort.dir=col==="name"?1:-1}rRank()}
+
+function rAll(){uBdg();uBtn();rSP();rCand();rHist();rRank()}
+
+/* ═══ ACTIONS ═══ */
+function init(){P=parseP(PI);rAll()}
+function draw(){const a=aP();if(a.length<4){smsg("参加中4名未満");return}const nx=CR.length+1;if(!CR.length){CC=genR(a,nx);smsg("初回完全乱数で抽選しました。再度「抽選」で再抽選できます。")}else{const h=bS(CR);const pool=genO(a,h,nx);if(!pool.length){smsg("候補生成失敗");return}CC=pool[0];smsg("履歴考慮の抽選候補を生成しました。")}rAll()}
+function conf(){if(!CC){smsg("候補なし");return}const rec=toRec(CC);CR.push(rec);CC=null;smsg("第"+rec.rn+"試合を確定しました。");rAll()}
+function doHReset(){closeMenu();showC("履歴・得点・候補をリセットしますか？\nメンバーと参加状態は保持されます。",function(){CR=[];CC=null;RS={};rankFilter="all";smsg("履歴リセット完了");rAll()})}
+function doFReset(){closeMenu();showC("すべて初期状態に戻しますか？",function(){PI=IN.join("\n");P=parseP(PI);CR=[];CC=null;RS={};rankFilter="all";smsg("全リセット完了");rAll()})}
+function showC(msg,fn){const ov=document.getElementById("cOv");ov.innerHTML='<div class="cbox"><div class="cmsg">'+esc(msg)+'</div><div class="cact"><button class="btn bs" onclick="document.getElementById(\'cOv\').style.display=\'none\'">キャンセル</button><button class="btn bp" id="cOk">実行</button></div></div>';ov.style.display="flex";document.getElementById("cOk").onclick=function(){ov.style.display="none";fn()};ov.onclick=function(e){if(e.target===ov)ov.style.display="none"}}
+
+function copyToClip(text,btn){
+  // try multiple approaches for Artifact compatibility
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){flashCopy(btn)}).catch(function(){fallbackCopy(text,btn)});
+  }else{fallbackCopy(text,btn)}
+}
+function fallbackCopy(text,btn){
+  var ta=document.createElement("textarea");ta.value=text;ta.style.cssText="position:fixed;left:-9999px";document.body.appendChild(ta);ta.focus();ta.select();try{document.execCommand("copy");flashCopy(btn)}catch(e){}document.body.removeChild(ta);
+}
+function flashCopy(btn){btn.classList.add("ok");var orig=btn.innerHTML;btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>済';setTimeout(function(){btn.classList.remove("ok");btn.innerHTML=orig},1800)}
+
+function cpR(rn,btn){const r=CR.find(function(x){return x.rn===rn});if(!r)return;
+var t="第"+r.rn+"試合（"+r.at+"）\n\n【対戦カード】\n";
+r.mc.forEach(function(mc,i){var sd=RS[rn]?RS[rn][i]:null;var l=(i+1)+". "+tl(mc.a)+"  vs  "+tl(mc.b);if(sd&&sd.ar!==""&&sd.br!=="")l+="  ("+sd.ar+"-"+sd.br+")";t+=l+"\n"});
+t+="\n【ペア】\n";r.teams.forEach(function(te,i){t+=(i+1)+". "+tl(te)+"\n"});
+if(r.wi.length)t+="\n待機: "+nms(r.wi).join("、")+"\n";if(r.ii.length)t+="不参加: "+nms(r.ii).join("、")+"\n";
+copyToClip(t,btn)}
+
+/* ═══ TABS ═══ */
+function stab(t){document.getElementById("tD").classList.toggle("on",t==="d");document.getElementById("tR").classList.toggle("on",t==="r");document.getElementById("pD").style.display=t==="d"?"block":"none";document.getElementById("pR").style.display=t==="r"?"block":"none";if(t==="r")rRank()}
+
+/* ═══ MENU ═══ */
+document.getElementById("menuBtn").addEventListener("click",function(e){e.stopPropagation();document.getElementById("menuDd").classList.toggle("open")});
+document.addEventListener("click",function(){document.getElementById("menuDd").classList.remove("open")});
+function closeMenu(){document.getElementById("menuDd").classList.remove("open")}
+
+/* ═══ MODALS ═══ */
+function openM(type,param){closeMenu();var ov=document.getElementById("mOv"),box=document.getElementById("mBx"),ti=document.getElementById("mTi"),bd=document.getElementById("mBd");box.classList.remove("wide");
+if(type==="participants"){ti.textContent="メンバー管理";bd.innerHTML='<div style="margin-bottom:12px"><label style="font-size:.83rem;font-weight:600;display:block;margin-bottom:4px">初期メンバー（1行1名）</label><textarea class="ta" id="mPI">'+esc(PI)+'</textarea><div class="sn">反映で履歴リセット</div></div><button class="btn bp" onclick="applyP()">反映</button><hr class="sdiv"><label style="font-size:.83rem;font-weight:600;display:block;margin-bottom:4px">途中参加追加</label><div class="ir"><input class="inp" id="mNN" placeholder="名前"><button class="btn bs" onclick="addP()">追加</button></div>'}
+else if(type==="status"){ti.textContent="参加状態の変更";var a=aP(),n=iP();bd.innerHTML='<div class="pcols"><div class="pg"><h4><span style="color:var(--ok)">●</span> 参加中 ('+a.length+')</h4>'+(a.length?a.map(function(p){return'<div class="pr"><span>'+esc(p.name)+'</span><button class="btn bs" onclick="togS(\''+p.id+'\')">離脱</button></div>'}).join(""):'<div style="color:var(--tm);font-size:.83rem">なし</div>')+'</div><div class="pg"><h4><span style="color:var(--tm)">●</span> 休止中 ('+n.length+')</h4>'+(n.length?n.map(function(p){return'<div class="pr"><span>'+esc(p.name)+'</span><button class="btn bs" onclick="togS(\''+p.id+'\')">復帰</button></div>'}).join(""):'<div style="color:var(--tm);font-size:.83rem">なし</div>')+'</div></div>'}
+else if(type==="pairMatrix"||type==="oppMatrix"){var isPair=type==="pairMatrix";ti.textContent=isPair?"ペア回数マトリクス":"敵対回数マトリクス";box.classList.add("wide");var h=bS(CR);var rec=isPair?h.pc:h.oc;if(!P.length){bd.innerHTML='<div class="empty">メンバーなし</div>'}else{var mx=Math.max(1,...Object.values(rec));var rows=P.map(function(row){var cells=P.map(function(col){if(row.id===col.id)return'<td class="diag">-</td>';var v=rec[pk(row.id,col.id)]||0;var int=v?Math.min(1,v/mx):0;var bg=v?"rgba(192,57,43,"+(0.08+int*0.45)+")":"";var fw=v?"700":"400";var cl=v?(int>0.5?"#fff":"var(--dg)"):"";return'<td style="background:'+bg+";font-weight:"+fw+";color:"+cl+'">'+v+"</td>"}).join("");var sb=row.st==="i"?' <span class="badge bm" style="font-size:.6rem">休止</span>':"";return"<tr><td>"+esc(row.name)+sb+"</td>"+cells+"</tr>"}).join("");var hds=P.map(function(p){var sb=p.st==="i"?'<br><span class="badge bm" style="font-size:.55rem">休止</span>':"";return"<th>"+esc(p.name)+sb+"</th>"}).join("");bd.innerHTML='<div class="mw"><table class="mt"><thead><tr><th></th>'+hds+"</tr></thead><tbody>"+rows+"</tbody></table></div>"}}
+else if(type==="drawW"){ti.textContent="抽選スコア設定";var G=[["スコア計算",["pp","ペア重複ペナルティ"],["rpp","直近ペア重複ペナルティ"],["op","対戦重複ペナルティ"],["rop","直近対戦重複ペナルティ"],["npb","新規ペアボーナス"],["nob","新規対戦ボーナス"],["bp","待機偏りペナルティ"],["plp","出場偏りペナルティ"],["fp","公平性ペナルティ"],["fdp","交流多様性ペナルティ"],["mcp","同一カード重複ペナルティ"]],["待機者選定",["bw","待機回数重み"],["upw","未組相手重み"],["uow","未対戦相手重み"]],["ペア生成",["gpw","ペア重複重み"],["grpw","直近ペア重み"],["gnpb","新規ペアボーナス"],["gdw","多様性重み"]],["探索パラメータ",["iter","探索回数"],["topK","上位保持数"],["lip","局所改善回数"]]];var html="";for(var gi=0;gi<G.length;gi++){var g=G[gi];html+='<div class="sfg"><h4>'+g[0]+"</h4>";for(var fi=1;fi<g.length;fi++){var k=g[fi][0],l=g[fi][1];html+='<div class="sf"><label>'+l+'</label><input type="number" value="'+W[k]+'" onchange="W[\''+k+"']=+this.value\"></div>"}html+="</div>"}html+='<div class="sn">変更は次回抽選から反映。リロードで初期値に戻ります。</div>';bd.innerHTML=html}
+else if(type==="scoreC"){ti.textContent="得点配分設定";bd.innerHTML='<div class="sfg"><h4>得点配分</h4><div class="sf"><label>1勝あたりの得点</label><input type="number" value="'+SC.wp+'" onchange="SC.wp=+this.value;rRank()"></div><div class="sf"><label>1Rあたりの得点</label><input type="number" value="'+SC.rp+'" onchange="SC.rp=+this.value;rRank()"></div></div><div class="sn">ボーナスは各試合の得点入力画面から手動入力。変更は即座に反映。</div>'}
+else if(type==="scoreInput"){
+  var rn=param;var r=CR.find(function(x){return x.rn===rn});if(!r)return;
+  ti.textContent="第"+rn+"試合 得点入力";
+  var cards=r.mc.map(function(mc,ci){
+    if(!RS[rn])RS[rn]={};if(!RS[rn][ci])RS[rn][ci]={ar:"",br:"",bonus:{}};
+    var sd=RS[rn][ci];var aR=sd.ar,bR=sd.br;
+    var aW=aR!==""&&bR!==""&&+aR>+bR;var bW=aR!==""&&bR!==""&&+bR>+aR;
+    var allIds=[].concat(mc.a.p,mc.b.p);
+    var h='<div class="sc-card"><h4>第'+(ci+1)+'カード</h4>';
+    h+='<div class="sc-row"><label>'+esc(tl(mc.a))+'</label><input type="number" min="0" value="'+aR+'" id="sc_'+rn+'_'+ci+'_ar" onchange="updSc('+rn+","+ci+")\"> R"+(aW?' <span class="win-tag">WIN</span>':"")+"</div>";
+    h+='<div class="sc-row"><label>'+esc(tl(mc.b))+'</label><input type="number" min="0" value="'+bR+'" id="sc_'+rn+'_'+ci+'_br" onchange="updSc('+rn+","+ci+")\"> R"+(bW?' <span class="win-tag">WIN</span>':"")+"</div>";
+    h+='<hr class="sc-sep"><div style="font-size:.8rem;font-weight:600;color:var(--ts);margin-bottom:4px">ボーナス得点</div>';
+    for(var pi=0;pi<allIds.length;pi++){var pid=allIds[pi];var bv=sd.bonus[pid]??"";h+='<div class="sc-row"><label>'+esc(nm(pid))+'</label><input type="number" value="'+bv+'" id="sb_'+rn+"_"+ci+"_"+pi+'" onchange="updB('+rn+","+ci+",'"+pid+"',this.value)\"></div>"}
+    h+="</div>";return h}).join("");
+  bd.innerHTML=cards+'<div class="sn">入力は即座に保存されます。ウィンドウを閉じても保持されます。</div>'
+}
+ov.style.display="flex"}
+
+function updSc(rn,ci){
+  var arEl=document.getElementById("sc_"+rn+"_"+ci+"_ar");
+  var brEl=document.getElementById("sc_"+rn+"_"+ci+"_br");
+  if(!RS[rn])RS[rn]={};if(!RS[rn][ci])RS[rn][ci]={ar:"",br:"",bonus:{}};
+  RS[rn][ci].ar=arEl.value===""?"":+arEl.value;
+  RS[rn][ci].br=brEl.value===""?"":+brEl.value;
+  // re-render the modal to show WIN tags
+  openM("scoreInput",rn);
+  rHist();rRank();
+}
+function updB(rn,ci,pid,v){
+  if(!RS[rn])RS[rn]={};if(!RS[rn][ci])RS[rn][ci]={ar:"",br:"",bonus:{}};
+  if(!RS[rn][ci].bonus)RS[rn][ci].bonus={};
+  if(v==="")delete RS[rn][ci].bonus[pid];else RS[rn][ci].bonus[pid]=+v;
+  rRank();
+}
+
+function closeM(){document.getElementById("mOv").style.display="none"}
+function applyP(){var v=document.getElementById("mPI").value;PI=v;P=parseP(v);CR=[];CC=null;RS={};rankFilter="all";smsg(aP().length<4?"参加中4名未満":"メンバー"+P.length+"名反映");closeM();rAll()}
+function addP(){var n=document.getElementById("mNN").value.trim();if(!n)return;P.push({id:mid(P.length+1+CR.length*1000,n),name:n,st:"a"});PI=PI.trim()?PI+"\n"+n:n;CC=null;smsg(n+"を追加");closeM();rAll()}
+function togS(id){var p=P.find(function(x){return x.id===id});if(!p)return;p.st=p.st==="a"?"i":"a";CC=null;smsg(p.name+"を"+(p.st==="a"?"参加中":"休止")+"に変更");openM("status");rAll()}
+init();
+</script>
+</body>
+</html>
